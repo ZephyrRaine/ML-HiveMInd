@@ -9,3 +9,7 @@ Participation for [Unity's ML-Agents Challenge](https://connect.unity.com/challe
 - Quick prototype
 - ML-agents & TensorSharp implementation
 - Training
+
+# Issues
+
+- Collision concurrency with moving entities?
