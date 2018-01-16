@@ -10,7 +10,7 @@ public class GotoAgent : Agent {
 	{
         List<float> state = new List<float>();
 
-        // Debug.Log("\n");
+        //  Debug.Log("\n");
 
         state.Add(target.x - transform.position.x);
     	state.Add(target.y - transform.position.y);
@@ -37,15 +37,16 @@ public class GotoAgent : Agent {
             }
         }
 
-        // Debug.Log(string.Format("{0},{1},{2}", state[2], state[3], state[4]));
-        // Debug.Log(string.Format("{0},X,{1}", state[5], state[6]));
-        // Debug.Log(string.Format("{0},{1},{2}", state[7], state[8], state[9]));
+        //  Debug.Log(string.Format("{0},{1},{2}", state[2], state[3], state[4]));
+        //  Debug.Log(string.Format("{0},X,{1}", state[5], state[6]));
+        //  Debug.Log(string.Format("{0},{1},{2}", state[7], state[8], state[9]));
 
         return state;
     }
 
 	public override void AgentStep(float[] act)
 	{
+        reward = -0.001f;
 		int movement = Mathf.FloorToInt(act[0]);
         Vector3 targetMovement = Vector3.zero;
         if (movement == 1) { targetMovement = Vector3.right * -1f; }
@@ -79,7 +80,13 @@ public class GotoAgent : Agent {
 
 	public override void AgentReset()
 	{
-        target = target == area.target1.transform.position ? area.target2.transform.position : area.target1.transform.position;
+        target = area.GetNewTarget(target, transform.position);
+    }
+
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere(target, 0.5f);
     }
 
 }
