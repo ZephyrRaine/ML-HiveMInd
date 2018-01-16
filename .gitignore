@@ -8,8 +8,6 @@
 /unity-environment/Assets/AssetStoreTools*
 
 # Tensorflow Model Info
-/python/models
-/python/summaries
 
 # Environemnt logfile
 *unity-environment.log

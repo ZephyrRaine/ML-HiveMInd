@@ -83,10 +83,6 @@ public class GotoAgent : Agent {
         target = area.GetNewTarget(target, transform.position);
     }
 
-    void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawSphere(target, 0.5f);
-    }
+
 
 }
