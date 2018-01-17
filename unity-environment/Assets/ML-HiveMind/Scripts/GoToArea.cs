@@ -12,7 +12,7 @@ public class GoToArea : MonoBehaviour {
     {
         targets = new List<Vector3>();
     }
-    public Vector3 GetNewTarget(Vector3 curTarget, Vector3 curPosition)
+    public virtual Vector3 GetNewTarget(Vector3 curTarget, Vector3 curPosition)
     {
         if(targets.Contains(curTarget))
         {
@@ -29,6 +29,12 @@ public class GoToArea : MonoBehaviour {
         
         targets.Add(randomTarget);
         return randomTarget;
+    }
+
+    public virtual Vector3 GetNewBase(Vector3 curBasePosition, Vector3 curPosition)
+    {
+        Debug.LogError("OOPS");
+        return Vector3.zero;
     }
 
     void OnDrawGizmos()
