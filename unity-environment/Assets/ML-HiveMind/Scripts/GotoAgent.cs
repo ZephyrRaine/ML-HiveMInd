@@ -58,13 +58,14 @@ public class GotoAgent : Agent
 		}
 		else
 		{
-			if(!Physics2D.OverlapCircle(transform.position + targetMovement, 0.1f))
+            Collider2D c;
+			if((c = Physics2D.OverlapCircle(transform.position + targetMovement, 0.1f)) && !c.isTrigger)
 			{
-                transform.position = transform.position +  targetMovement;
+                reward = -0.01f;
 			}
 			else
 			{
-                reward = -0.01f;
+                transform.position = transform.position +  targetMovement;
             }
 		}
     }

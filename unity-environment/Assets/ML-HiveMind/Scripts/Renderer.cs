@@ -22,11 +22,6 @@ public class Renderer : MonoBehaviour {
 
 	void OnDrawGizmos()
     {
-		if(entity != null)
-		{
-			Gizmos.color = Color.red;
-			Gizmos.DrawSphere(entity.target, 0.5f);
-			Gizmos.DrawLine(transform.position, entity.target);
-		}
+		
     }
 }

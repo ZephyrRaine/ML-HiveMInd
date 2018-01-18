@@ -6,31 +6,28 @@ public class FetcherAgent : GotoAgent
 {
 	Vector3 basePosition;
 	int charging = 0;
-	int targetCount = 5;
 
     public override float GetTileIndex(Vector3 position)
     {
-		if(basePosition == position)
-			return 3f;
-        if(target == position)
-            return 2f;
-		else if(Physics2D.OverlapCircle(position, 0.1f))
-            return 1f;
+		Collider2D c;
+		if(c = Physics2D.OverlapCircle(position, 0.1f))
+		{
+			// Debug.Log(c);
+			if(c.name == "Base")
+				return 3f;
+			else if(c.name == "Gold")
+				return 2f;
+			else
+				return 1f;
+		}
 		else
 		    return 0f;
     }
     
     public override List<float> CollectState()
 	{
-        List<float> state = new List<float>();
-
 		state.Add(charging);
 
-        state.Add(target.x - transform.position.x);
-    	state.Add(target.y - transform.position.y);
-
-		state.Add(basePosition.x - transform.position.x);
-		state.Add(basePosition.y - transform.position.y);
         // Debug.Log("Distance : " + state[0] + " - " + state[1]);
         for (int y = 1; y >= -1; y--)
 		{
@@ -52,29 +49,29 @@ public class FetcherAgent : GotoAgent
 
 	public override void AgentStep(float[] act)
 	{
-        reward = -0.0001f;
+        //reward = -0.0001f;
 		
         MoveAgent(act);
 
-		if(charging == 0 && transform.position == target)
+		if(charging == 0 && GetTileIndex(transform.position) == 2)
 		{
             reward = 0.5f;
 			charging = 1;
         }
-		else if(charging == 1 && transform.position == basePosition)
+		else if(charging == 1 && GetTileIndex(transform.position) == 3)
 		{
 			charging = 0;
-			reward = 1f;
+			reward = 0.5f;
 			done = true;
 		}
 
-		Monitor.Log("charging", charging, MonitorType.text , transform);
+		// Monitor.Log("charging", charging, MonitorType.text , transform);
 	}
 
 	public override void AgentReset()
 	{
-		FetcherArea f = (FetcherArea)area;
-		target = f.GetNewTarget(target, transform.position, ref targetCount);
-		basePosition = f.GetNewBase(basePosition, transform.position);
+		// FetcherArea f = (FetcherArea)area;
+		// target = f.GetNewTarget(target, transform.position, ref targetCount);
+		// basePosition = f.GetNewBase(basePosition, transform.position);
     }
 }

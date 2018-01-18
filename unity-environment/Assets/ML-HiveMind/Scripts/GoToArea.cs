@@ -8,7 +8,7 @@ public class GoToArea : MonoBehaviour {
     public TilemapCollider2D tilemap;
     List<Vector3> targets;
 
-    void Start()
+    protected virtual void Start()
     {
         targets = new List<Vector3>();
     }
