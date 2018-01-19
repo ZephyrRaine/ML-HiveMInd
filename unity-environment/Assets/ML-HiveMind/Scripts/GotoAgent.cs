@@ -4,17 +4,27 @@ using UnityEngine;
 
 public class GotoAgent : Agent 
 {
+
+    
+	protected enum TILE_INDEX
+	{
+		NONE,
+		WALL,
+		GOLD,
+		BASE
+	}
+
     public GoToArea area;
     public Vector3 target;
 
-    public virtual float GetTileIndex(Vector3 position)
+    protected virtual TILE_INDEX GetTileIndex(Vector3 position)
     {
         if(target == position)
-            return 2f;
+            return TILE_INDEX.GOLD;
 		else if(Physics2D.OverlapCircle(position, 0.1f))
-            return 1f;
+            return TILE_INDEX.WALL;
 		else
-		    return 0f;
+		    return TILE_INDEX.NONE;
     } 
 
     public override List<float> CollectState()
@@ -32,7 +42,7 @@ public class GotoAgent : Agent
 			{
 				if(x!=0 || y!=0)
 				{
-					state.Add(GetTileIndex(transform.position + new Vector3(x, y, 0)));
+					state.Add((float)GetTileIndex(transform.position + new Vector3(x, y, 0)));
 				}
             }
         }

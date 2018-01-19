@@ -12,6 +12,19 @@ public class GoToArea : MonoBehaviour {
     {
         targets = new List<Vector3>();
     }
+
+    protected Vector3 GetRandomPosition()
+    {
+        Vector3 randomPosition;
+        do
+        {
+            randomPosition = new Vector3(
+            Mathf.FloorToInt(tilemap.bounds.center.x) + Random.Range(-Mathf.FloorToInt(tilemap.bounds.extents.x) +1, Mathf.FloorToInt(tilemap.bounds.extents.x) - 1),
+            Mathf.FloorToInt(tilemap.bounds.center.y) + Random.Range(-Mathf.FloorToInt(tilemap.bounds.extents.y) +1, Mathf.FloorToInt(tilemap.bounds.extents.y) - 1),
+            0);
+        } while(Physics2D.OverlapCircle(randomPosition, 0.1f));
+        return randomPosition;
+    }
     public virtual Vector3 GetNewTarget(Vector3 curTarget, Vector3 curPosition)
     {
         if(targets.Contains(curTarget))
@@ -21,12 +34,8 @@ public class GoToArea : MonoBehaviour {
         Vector3 randomTarget;
         do
         {
-            randomTarget = new Vector3(
-            Mathf.FloorToInt(tilemap.bounds.center.x) + Random.Range(-Mathf.FloorToInt(tilemap.bounds.extents.x) +1, Mathf.FloorToInt(tilemap.bounds.extents.x) - 1),
-            Mathf.FloorToInt(tilemap.bounds.center.y) + Random.Range(-Mathf.FloorToInt(tilemap.bounds.extents.y) +1, Mathf.FloorToInt(tilemap.bounds.extents.y) - 1),
-            0);
-        } while(randomTarget == curTarget || randomTarget == curPosition || Physics2D.OverlapCircle(randomTarget, 0.1f) || targets.Contains(randomTarget));
-        
+            randomTarget = GetRandomPosition();
+        } while (randomTarget == curTarget || randomTarget == curPosition || targets.Contains(randomTarget));
         targets.Add(randomTarget);
         return randomTarget;
     }

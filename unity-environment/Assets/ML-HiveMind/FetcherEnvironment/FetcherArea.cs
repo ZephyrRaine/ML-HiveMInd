@@ -8,31 +8,52 @@ public class FetcherArea : GoToArea
 	public Transform baseTransform;
 	Tilemap tilemapInfos;
 
-	override protected void Start()
+    List<GoldMine> mines;
+    public int minStartMines;
+    public int maxStartMines;
+
+    public int maxTotalMines;
+
+    public GoldMine minePrefab;
+    override protected void Start()
 	{
 		tilemapInfos = tilemap.GetComponent<Tilemap>();
-		base.Start();
-	} 
-
-	public Vector3 GetNewTarget(Vector3 curTarget, Vector3 curPosition, ref int targetCount)
-	{
-		if(targetCount < 5)
+        mines = new List<GoldMine>();
+        for (int i = 0; i <= Random.Range(minStartMines, maxStartMines); i++)
 		{
-			targetCount++;
-			return curTarget;
-		}
+            AddNewMine();
+        }
+        base.Start();
+    } 
+
+	void AddNewMine()
+	{
+        GoldMine mine = Instantiate(minePrefab, GetRandomPosition(), Quaternion.identity, transform);
+        mine.Dried += CheckMines;
+        mines.Add(mine);
+    }
+
+	void CheckMines(GoldMine mine)
+	{
+        mine.Dried -= CheckMines;
+        if(mines.Count > maxTotalMines)
+		{
+			foreach(GoldMine m in mines)
+			{
+                Destroy(m.gameObject);
+            }
+            mines.Clear();
+			for (int i = 0; i <= Random.Range(minStartMines, maxStartMines); i++)
+			{
+				AddNewMine();
+			}
+        }
 		else
 		{
-			targetCount = 0;
-			Vector3 target;
-			do
-			{
-				target = base.GetNewTarget(curTarget, curPosition);
-			} while (target == baseTransform.position);
-			return target;
+        	AddNewMine();
 		}
-	}
-
+    }
+	
 	public override Vector3 GetNewBase(Vector3 curBasePosition, Vector3 curPosition)
 	{
 		return baseTransform.position;
