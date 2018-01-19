@@ -17,6 +17,7 @@ public class FetcherArea : GoToArea
     public GoldMine minePrefab;
     override protected void Start()
 	{
+		baseTransform.position = GetRandomPosition();
 		tilemapInfos = tilemap.GetComponent<Tilemap>();
         mines = new List<GoldMine>();
         for (int i = 0; i <= Random.Range(minStartMines, maxStartMines); i++)
@@ -36,22 +37,9 @@ public class FetcherArea : GoToArea
 	void CheckMines(GoldMine mine)
 	{
         mine.Dried -= CheckMines;
-        if(mines.Count > maxTotalMines)
-		{
-			foreach(GoldMine m in mines)
-			{
-                Destroy(m.gameObject);
-            }
-            mines.Clear();
-			for (int i = 0; i <= Random.Range(minStartMines, maxStartMines); i++)
-			{
-				AddNewMine();
-			}
-        }
-		else
-		{
-        	AddNewMine();
-		}
+		mines.Remove(mine);
+		Destroy(mine.gameObject);
+		AddNewMine();
     }
 	
 	public override Vector3 GetNewBase(Vector3 curBasePosition, Vector3 curPosition)
